@@ -31,6 +31,16 @@ public class MainActivity extends AppCompatActivity {
         names.add("C");
         names.add("D");
         names.add("E");
+        names.add("A");
+        names.add("B");
+        names.add("C");
+        names.add("D");
+        names.add("E");
+        names.add("A");
+        names.add("B");
+        names.add("C");
+        names.add("D");
+        names.add("E");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, names);
 

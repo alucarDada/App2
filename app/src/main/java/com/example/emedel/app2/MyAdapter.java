@@ -38,15 +38,29 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View retorno = convertView;
 
-        LayoutInflater layoutInflater = LayoutInflater.from(this.context);
-        retorno = layoutInflater.inflate(R.layout.linea_item,null);
+        ViewHolder holder;
+
+        if(convertView == null){
+            LayoutInflater layoutInflater = LayoutInflater.from(this.context);
+            convertView = layoutInflater.inflate(R.layout.linea_item,null);
+
+            holder = new ViewHolder();
+            holder.textView = (TextView) convertView.findViewById(R.id.textView);
+
+            convertView.setTag(holder);
+        }else{
+            holder = (ViewHolder) convertView.getTag();
+        }
 
         String currentName = names.get(position);
-        TextView textView = (TextView) retorno.findViewById(R.id.textView);
-        textView.setText(currentName);
+        holder.textView.setText(currentName);
 
-        return retorno;
+        return convertView;
     }
+
+    static class ViewHolder{
+        private TextView textView;
+    }
+
 }
