@@ -2,6 +2,7 @@ package com.example.emedel.app2;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class GridActivity extends AppCompatActivity {
 
-    private GridView listView;
+    private GridView gridView;
     private List<String> names = new ArrayList<String>();
     private MyAdapter myAdapter;
     private int bandera=0;
@@ -26,7 +27,7 @@ public class GridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grid);
 
-        listView = (GridView) findViewById(R.id.gridView);
+        gridView = (GridView) findViewById(R.id.gridView);
 
         names.add("A");
         names.add("B");
@@ -46,9 +47,9 @@ public class GridActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, names);
 
-        listView.setAdapter(adapter);
+        gridView.setAdapter(adapter);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(GridActivity.this, "Posicion: " + position + "\nLa letra es: " + names.get(position) + "\n Con id: " + id, Toast.LENGTH_LONG).show();
@@ -56,7 +57,9 @@ public class GridActivity extends AppCompatActivity {
         });
 
         myAdapter = new MyAdapter(this,R.layout.grid_item,names);
-        listView.setAdapter(myAdapter);
+        gridView.setAdapter(myAdapter);
+
+        registerForContextMenu(gridView);
     }
 
     @Override
@@ -78,4 +81,26 @@ public class GridActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        menu.setHeaderTitle(names.get(info.position));
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu,menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()){
+            case R.id.deleteItem:
+                names.remove(info.position);
+                this.myAdapter.notifyDataSetChanged();
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
 }
